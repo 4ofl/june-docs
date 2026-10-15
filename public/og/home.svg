@@ -1,0 +1,91 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Deep Obsidian Background -->
+  <rect width="1200" height="630" fill="#050507"/>
+  
+  <!-- Subtle Ambient Radial Glow (Top-Right Emerald) -->
+  <radialGradient id="glow" cx="88%" cy="12%" r="65%" fx="88%" fy="12%">
+    <stop offset="0%" stop-color="#10b981" stop-opacity="0.18"/>
+    <stop offset="50%" stop-color="#10b981" stop-opacity="0.03"/>
+    <stop offset="100%" stop-color="#050507" stop-opacity="0"/>
+  </radialGradient>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Subtle Blueprint Grid Pattern -->
+  <defs>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="rgba(255, 255, 255, 0.025)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+
+  <!-- Card Border & Container Panel -->
+  <rect x="48" y="48" width="1104" height="534" rx="20" fill="#09090c" fill-opacity="0.94" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1.5"/>
+
+  <!-- Top Accent Bar: Emerald gradient line -->
+  <path d="M 48 68 Q 48 48 68 48 L 1132 48 Q 1152 48 1152 68" stroke="url(#topBarGrad)" stroke-width="3.5" fill="none"/>
+  <linearGradient id="topBarGrad" x1="48" y1="48" x2="1152" y2="48" gradientUnits="userSpaceOnUse">
+    <stop offset="0%" stop-color="#10b981" stop-opacity="0.1"/>
+    <stop offset="25%" stop-color="#10b981" stop-opacity="0.85"/>
+    <stop offset="75%" stop-color="#34d399" stop-opacity="0.85"/>
+    <stop offset="100%" stop-color="#10b981" stop-opacity="0.1"/>
+  </linearGradient>
+
+  <!-- Brand / Category Header -->
+  <g transform="translate(96, 108)">
+    <text font-family="Space Grotesk, system-ui, -apple-system, sans-serif" font-size="28" font-weight="700" fill="#f4f4f5" letter-spacing="-0.02em">june</text>
+    <circle cx="82" cy="-9" r="3.5" fill="#10b981"/>
+    <text x="100" y="-1" font-family="JetBrains Mono, monospace" font-size="15" font-weight="500" fill="#8b8b96" letter-spacing="0.08em">PLATFORM ARCHITECTURE &amp; ENGINE</text>
+  </g>
+
+  <!-- Live Runtime Badge (Top Right) -->
+  <g transform="translate(900, 88)">
+    <rect width="204" height="34" rx="17" fill="#0d0d12" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1"/>
+    <circle cx="18" cy="17" r="4" fill="#10b981"/>
+    <text x="32" y="22" font-family="Space Grotesk, system-ui, sans-serif" font-size="13" font-weight="600" fill="#f4f4f5">Node 22 · SQLite WAL</text>
+  </g>
+
+  <!-- Command Syntax Banner Box -->
+  <g transform="translate(96, 160)">
+    <rect width="1008" height="96" rx="14" fill="#0d0d12" stroke="rgba(16, 185, 129, 0.28)" stroke-width="1.5"/>
+    <!-- Terminal Prompt Icon -->
+    <text x="32" y="60" font-family="JetBrains Mono, monospace" font-size="34" font-weight="600" fill="#10b981">&gt;</text>
+    <!-- Syntax Text -->
+    <text x="76" y="60" font-family="JetBrains Mono, monospace" font-size="32" font-weight="700" fill="#ffffff" letter-spacing="-0.01em">/help · Complete Command Surface</text>
+  </g>
+
+  <!-- Badges Row -->
+  <g transform="translate(96, 288)">
+    <!-- Badge 1: Tier -->
+    <rect x="0" y="0" width="227.5" height="34" rx="8" fill="rgba(16, 185, 129, 0.12)" stroke="rgba(16, 185, 129, 0.35)" stroke-width="1"/>
+    <text x="14" y="22" font-family="JetBrains Mono, monospace" font-size="13" font-weight="600" fill="#34d399">🔒 Invite-Only Whitelist</text>
+
+    <!-- Badge 2: Provider -->
+    <rect x="239.5" y="0" width="170.5" height="34" rx="8" fill="rgba(255, 255, 255, 0.04)" stroke="rgba(255, 255, 255, 0.10)" stroke-width="1"/>
+    <text x="253.5" y="22" font-family="JetBrains Mono, monospace" font-size="13" font-weight="500" fill="#a1a1aa">⚡ node:sqlite WAL</text>
+
+    
+    <!-- Badge 3: Architecture -->
+    <rect x="422" y="0" width="208.5" height="34" rx="8" fill="rgba(255, 255, 255, 0.03)" stroke="rgba(255, 255, 255, 0.07)" stroke-width="1"/>
+    <text x="436" y="22" font-family="JetBrains Mono, monospace" font-size="13" font-weight="500" fill="#71717a">🛡️ JMAP Ephemeral Mail</text>
+    
+  </g>
+
+  <!-- Description -->
+  <g transform="translate(96, 370)">
+    <text font-family="Space Grotesk, system-ui, -apple-system, sans-serif" font-size="22" font-weight="400" fill="#d4d4d8" letter-spacing="-0.01em">
+      <tspan x="96" dy="0">Private Discord utility platform, diagnostic engine, and ephemeral</tspan><tspan x="96" dy="34">mail service engineered with defense-in-depth network isolation.</tspan>
+    </text>
+  </g>
+
+  <!-- Footer Divider Line -->
+  <line x1="96" y1="492" x2="1104" y2="492" stroke="rgba(255, 255, 255, 0.07)" stroke-width="1"/>
+
+  <!-- Footer Row -->
+  <g transform="translate(96, 532)">
+    <text font-family="JetBrains Mono, monospace" font-size="15" font-weight="500" fill="#71717a">docs.june.4ofl.dev</text>
+    <text x="210" y="0" font-family="Space Grotesk, system-ui, sans-serif" font-size="15" font-weight="400" fill="#52525b">·</text>
+    <text x="228" y="0" font-family="Space Grotesk, system-ui, sans-serif" font-size="15" font-weight="400" fill="#71717a">Private Discord Utility &amp; Forensic Platform</text>
+
+    <text x="1008" y="0" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="14" font-weight="500" fill="#10b981">docs.june.4ofl.dev</text>
+  </g>
+</svg>

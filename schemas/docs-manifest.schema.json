@@ -1,0 +1,146 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://docs.june.4ofl.dev/schemas/docs-manifest.schema.json",
+    "title": "June documentation manifest",
+    "type": "object",
+    "required": ["schemaVersion", "generatedAt", "product", "version", "categories", "commands"],
+    "properties": {
+        "schemaVersion": { "const": 1 },
+        "generatedAt": { "type": "string", "format": "date-time" },
+        "product": {
+            "type": "object",
+            "required": ["name", "website", "documentation", "statusApi", "terms", "privacy"],
+            "properties": {
+                "name": { "const": "june" },
+                "description": { "type": "string" },
+                "website": { "type": "string", "format": "uri" },
+                "documentation": { "type": "string", "format": "uri" },
+                "statusApi": { "type": "string" },
+                "terms": { "type": "string", "format": "uri" },
+                "privacy": { "type": "string", "format": "uri" }
+            },
+            "additionalProperties": true
+        },
+        "version": {
+            "type": "object",
+            "required": ["release", "commit"],
+            "properties": {
+                "release": { "type": "string" },
+                "commit": { "type": ["string", "null"] }
+            },
+            "additionalProperties": false
+        },
+        "categories": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "array",
+                "items": { "type": "string" },
+                "uniqueItems": true
+            }
+        },
+        "commands": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/command" }
+        }
+    },
+    "$defs": {
+        "command": {
+            "type": "object",
+            "required": [
+                "id",
+                "path",
+                "root",
+                "kind",
+                "executable",
+                "children",
+                "category",
+                "access",
+                "surface",
+                "adminOnly",
+                "description",
+                "syntax",
+                "example",
+                "options",
+                "dataHandling"
+            ],
+            "properties": {
+                "id": { "type": "string", "pattern": "^[a-z0-9_.-]+$" },
+                "path": { "type": "string" },
+                "root": { "type": "string" },
+                "kind": { "enum": ["command", "subcommand_group", "subcommand"] },
+                "executable": { "type": "boolean" },
+                "children": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "uniqueItems": true
+                },
+                "category": { "type": "string" },
+                "access": { "enum": ["approved", "admin", "owner"] },
+                "surface": {
+                    "enum": [
+                        "global_both",
+                        "global_user",
+                        "global_guild",
+                        "management_admin",
+                        "management_owner"
+                    ]
+                },
+                "adminOnly": { "type": "boolean" },
+                "description": { "type": "string" },
+                "syntax": { "type": "string" },
+                "example": { "type": "string" },
+                "options": {
+                    "type": "array",
+                    "items": { "$ref": "#/$defs/option" }
+                },
+                "dataHandling": {
+                    "type": "object",
+                    "required": ["provider", "storage", "privacy"],
+                    "properties": {
+                        "provider": { "type": "string" },
+                        "storage": { "type": "string" },
+                        "privacy": { "type": "string" }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        },
+        "option": {
+            "type": "object",
+            "required": [
+                "name",
+                "description",
+                "type",
+                "required",
+                "autocomplete",
+                "minimum",
+                "maximum",
+                "choices"
+            ],
+            "properties": {
+                "name": { "type": "string" },
+                "description": { "type": "string" },
+                "type": { "type": "string" },
+                "required": { "type": "boolean" },
+                "autocomplete": { "type": "boolean" },
+                "minimum": { "type": ["number", "null"] },
+                "maximum": { "type": ["number", "null"] },
+                "choices": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": ["name", "value"],
+                        "properties": {
+                            "name": { "type": "string" },
+                            "value": { "type": ["string", "number"] }
+                        },
+                        "additionalProperties": false
+                    }
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

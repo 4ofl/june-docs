@@ -1,0 +1,25 @@
+{
+  "name": "june-docs",
+  "version": "1.0.0",
+  "description": "Official documentation and architectural specifications for June",
+  "scripts": {
+    "dev": "vitepress dev .",
+    "build": "vitepress build .",
+    "preview": "vitepress preview ."
+  },
+  "keywords": [
+    "discord-bot",
+    "documentation",
+    "vitepress",
+    "architecture",
+    "sqlite",
+    "jmap"
+  ],
+  "author": "4ofl",
+  "license": "ISC",
+  "devDependencies": {
+    "vitepress": "^1.6.4",
+    "vue": "^3.5.43",
+    "mermaid": "^12.2.0"
+  }
+}

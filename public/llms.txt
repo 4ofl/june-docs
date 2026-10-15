@@ -1,0 +1,406 @@
+# June Discord Utility Platform
+> Technical architecture, security hardening, and complete command reference for June, an invite-only Discord utility, forensic, and temporary mail platform.
+
+## System Overview
+- Runtime: Node.js 22 LTS with single-process singleton architecture, sliding-window rate limiters, and worker thread sandboxes.
+- Persistence: Node.js 22 built-in node:sqlite in Write-Ahead Logging (WAL) mode delivering sub-millisecond local queries without third-party native C++ build toolchains.
+- Ephemeral Email: Self-hosted Stalwart JMAP mail engine (RFC 8621 / RFC 8620) with deterministic 60-minute inboxes and real-time Server-Sent Events.
+- Network Isolation: Strict IP destination filtering, pinned socket connections preventing DNS rebinding (TOCTOU), and 500ms ReDoS worker watchdogs.
+- User Data Sovereignty: GDPR-style atomic data inspection (/data view), export (/data export), and permanent purge (/data delete).
+
+## Core Documentation Sitemap
+- [Platform Overview](https://docs.june.4ofl.dev/): Architecture overview and system philosophy.
+- [System Topology & Runtime](https://docs.june.4ofl.dev/architecture/): Gateway ingestion, rate limiters, worker boundaries.
+- [Security & Hardening](https://docs.june.4ofl.dev/architecture/security): IP firewall, socket pinning, ReDoS mitigation.
+- [SQLite Storage Engine](https://docs.june.4ofl.dev/architecture/storage): Zero-dependency node:sqlite WAL persistence.
+- [JMAP Ephemeral Mail](https://docs.june.4ofl.dev/architecture/jmap-mail): Stalwart JMAP mailboxes and lease enforcement.
+- [Command Reference Matrix](https://docs.june.4ofl.dev/commands/): Master matrix of all slash commands.
+- [General Utilities](https://docs.june.4ofl.dev/commands/general): Productivity, reminders, temporary mail, data sovereignty.
+- [OSINT & Recon](https://docs.june.4ofl.dev/commands/osint): Lawful reconnaissance, DNS, whois, certificate transparency.
+- [Threat Intelligence](https://docs.june.4ofl.dev/commands/threat): Forensic analysis, port scanning, URL sandboxes.
+- [Web & Media](https://docs.june.4ofl.dev/commands/web): Network diagnostics, IP geolocation, website inspection.
+- [Live Telemetry Endpoint](https://june.4ofl.dev/api/status): Live operational state, shard latency, and provider health.
+
+## Complete Slash Command Surface (63 Commands)
+
+- **`/avatar`** (General Utilities)
+  - Description: Show a user’s profile avatar.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/avatar
+
+- **`/banner`** (General Utilities)
+  - Description: Show a user’s profile banner.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/banner
+
+- **`/bin`** (General Utilities)
+  - Description: Create and manage your secure pastes.
+  - Access Tier: Whitelisted User
+  - Data Retention: SQLite Stored
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/bin
+
+- **`/breach`** (Threat Intelligence)
+  - Description: Check whether a public breach index has entries for an email address.
+  - Access Tier: Whitelisted User
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/breach
+
+- **`/codec`** (General Utilities)
+  - Description: Encode and decode text formats.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/codec
+
+- **`/color`** (General Utilities)
+  - Description: Generate a solid color preview.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/color
+
+- **`/crypto`** (General Utilities)
+  - Description: Check a cryptocurrency market price.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/crypto
+
+- **`/data`** (General Utilities)
+  - Description: Review, export, or delete your June data.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/data
+
+- **`/dict`** (General Utilities)
+  - Description: Look up an English word.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/dict
+
+- **`/diff`** (General Utilities)
+  - Description: Compare two text values.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/diff
+
+- **`/download`** (General Utilities)
+  - Description: Download media from a supported URL.
+  - Access Tier: Whitelisted User
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/download
+
+- **`/evidence`** (General Utilities)
+  - Description: Generate a verifiable cryptographic forensic bundle for a website.
+  - Access Tier: Whitelisted User
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/evidence
+
+- **`/exif`** (Threat Intelligence)
+  - Description: Extract metadata embedded in an image.
+  - Access Tier: Whitelisted User
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/exif
+
+- **`/geoip`** (Web & Media)
+  - Description: Look up approximate public geolocation data for an IP address.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/geoip
+
+- **`/github`** (OSINT & Reconnaissance)
+  - Description: Look up a public GitHub profile.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/github
+
+- **`/hash`** (General Utilities)
+  - Description: Generate a cryptographic hash.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/hash
+
+- **`/help`** (General Utilities)
+  - Description: Browse commands or inspect usage, examples, and data handling.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/help
+
+- **`/info`** (General Utilities)
+  - Description: Show June’s runtime information.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/info
+
+- **`/invite`** (OSINT & Reconnaissance)
+  - Description: Inspect a Discord invite.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/invite
+
+- **`/json`** (General Utilities)
+  - Description: Format, validate, and inspect JSON.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/json
+
+- **`/jwt`** (Web & Media)
+  - Description: Decode the header and payload of a JWT without verifying it.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/jwt
+
+- **`/lens`** (OSINT & Reconnaissance)
+  - Description: Find visually similar public images.
+  - Access Tier: Whitelisted User
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/lens
+
+- **`/mailcheck`** (Web & Media)
+  - Description: Check mail configuration records.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/mailcheck
+
+- **`/media`** (General Utilities)
+  - Description: Look up films, shows, games, anime, songs, and lyrics.
+  - Access Tier: Whitelisted User
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/media
+
+- **`/minecraft`** (Web & Media)
+  - Description: Look up Minecraft players, skins, and servers.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/minecraft
+
+- **`/npm`** (General Utilities)
+  - Description: Look up a package on npm.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/npm
+
+- **`/ocr`** (General Utilities)
+  - Description: Extract text from an image.
+  - Access Tier: Whitelisted User
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/ocr
+
+- **`/password`** (General Utilities)
+  - Description: Generate a cryptographically secure random password.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/password
+
+- **`/phishcheck`** (Threat Intelligence)
+  - Description: Show available VirusTotal analysis signals for a URL.
+  - Access Tier: Whitelisted User
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/phishcheck
+
+- **`/ping`** (General Utilities)
+  - Description: Check June’s current latency.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/ping
+
+- **`/poll`** (General Utilities)
+  - Description: Create a Discord poll.
+  - Access Tier: Whitelisted User / Guild Member
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/poll
+
+- **`/pomelo`** (General Utilities)
+  - Description: Check Discord username availability.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/pomelo
+
+- **`/portscan`** (Threat Intelligence)
+  - Description: Scan common ports on an authorized public host.
+  - Access Tier: Operator / Bot Administrator Only (requires authorized:true)
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/portscan
+
+- **`/privacy`** (General Utilities)
+  - Description: See what June stores, shares, and lets you control.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/privacy
+
+- **`/qr`** (General Utilities)
+  - Description: Encode text as a QR code.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/qr
+
+- **`/receipt`** (General Utilities)
+  - Description: Manage your saved receipts.
+  - Access Tier: Whitelisted User / Guild Member
+  - Data Retention: SQLite Stored
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/receipt
+
+- **`/reddit`** (OSINT & Reconnaissance)
+  - Description: Look up a public Reddit profile.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/reddit
+
+- **`/regex`** (General Utilities)
+  - Description: Test a regular expression against a string.
+  - Access Tier: Whitelisted User
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/regex
+
+- **`/rembg`** (General Utilities)
+  - Description: Remove the background from an image.
+  - Access Tier: Whitelisted User
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/rembg
+
+- **`/remind`** (General Utilities)
+  - Description: Manage private reminders.
+  - Access Tier: Whitelisted User / Guild Member
+  - Data Retention: SQLite Stored
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/remind
+
+- **`/roblox`** (General Utilities)
+  - Description: Look up a Roblox account.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/roblox
+
+- **`/roleplay`** (Roleplay Actions)
+  - Description: Use a roleplay action.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/roleplay
+
+- **`/sanitize`** (General Utilities)
+  - Description: Clean tracking parameters, metadata, and invisible characters.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/sanitize
+
+- **`/screenshot`** (General Utilities)
+  - Description: Render a screenshot of a public webpage.
+  - Access Tier: Whitelisted User
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/screenshot
+
+- **`/settings`** (General Utilities)
+  - Description: Manage your personal June defaults.
+  - Access Tier: All Users
+  - Data Retention: SQLite Stored
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/settings
+
+- **`/shorten`** (Web & Media)
+  - Description: Create and manage your shortened URLs.
+  - Access Tier: Whitelisted User
+  - Data Retention: SQLite Stored
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/shorten
+
+- **`/site`** (Web & Media)
+  - Description: Inspect public websites and domains.
+  - Access Tier: Whitelisted User
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/site
+
+- **`/snowflake`** (General Utilities)
+  - Description: Inspect a Discord snowflake ID.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/snowflake
+
+- **`/status`** (General Utilities)
+  - Description: Check June and provider health.
+  - Access Tier: Whitelisted User
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/status
+
+- **`/telegram`** (OSINT & Reconnaissance)
+  - Description: Look up a public Telegram profile or channel.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/telegram
+
+- **`/tempmail`** (General Utilities)
+  - Description: Manage private, self-hosted temporary inboxes.
+  - Access Tier: Whitelisted User
+  - Data Retention: SQLite Stored
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/tempmail
+
+- **`/time`** (General Utilities)
+  - Description: Check local time and create or parse Discord timestamps.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/time
+
+- **`/tldr`** (General Utilities)
+  - Description: Summarize text into a few concise points.
+  - Access Tier: Whitelisted User / Guild Member
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/tldr
+
+- **`/translate`** (General Utilities)
+  - Description: Translate text.
+  - Access Tier: Whitelisted User
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/translate
+
+- **`/unicode`** (General Utilities)
+  - Description: Unicode string utilities.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/unicode
+
+- **`/urban`** (General Utilities)
+  - Description: Look up a term on Urban Dictionary.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/urban
+
+- **`/urlscan`** (Threat Intelligence)
+  - Description: Submit a public URL to urlscan.io as unlisted.
+  - Access Tier: Whitelisted User
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/urlscan
+
+- **`/useragent`** (Web & Media)
+  - Description: Parse a User-Agent string.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/useragent
+
+- **`/uuid`** (General Utilities)
+  - Description: Generate a random UUID.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/uuid
+
+- **`/watch`** (General Utilities)
+  - Description: Infrastructure & Domain Sentinel: monitor uptime, TLS, and DNS.
+  - Access Tier: Whitelisted User
+  - Data Retention: SQLite Stored
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/watch
+
+- **`/weather`** (General Utilities)
+  - Description: Check current weather for a location.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/weather
+
+- **`/whois`** (General Utilities)
+  - Description: Extract detailed Discord profile data.
+  - Access Tier: Whitelisted User / Guild Member
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/whois
+
+- **`/wiki`** (General Utilities)
+  - Description: Look up a Wikipedia article.
+  - Access Tier: All Users
+  - Data Retention: Ephemeral
+  - Direct Permalink: https://docs.june.4ofl.dev/commands/wiki
+
+## Full Unified Documentation
+For full plain-text ingestion in a single stream, see:
+https://docs.june.4ofl.dev/llms-full.txt

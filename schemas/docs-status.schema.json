@@ -1,0 +1,78 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://docs.june.4ofl.dev/schemas/docs-status.schema.json",
+    "title": "June public status",
+    "type": "object",
+    "required": [
+        "schemaVersion",
+        "checkedAt",
+        "status",
+        "version",
+        "uptimeSeconds",
+        "discord",
+        "database",
+        "providers",
+        "runtime"
+    ],
+    "properties": {
+        "schemaVersion": { "const": 1 },
+        "checkedAt": { "type": "string", "format": "date-time" },
+        "status": { "enum": ["operational", "degraded"] },
+        "version": {
+            "type": "object",
+            "required": ["release", "commit"],
+            "properties": {
+                "release": { "type": "string" },
+                "commit": { "type": ["string", "null"] }
+            },
+            "additionalProperties": false
+        },
+        "uptimeSeconds": { "type": "integer", "minimum": 0 },
+        "discord": {
+            "type": "object",
+            "required": ["connected", "gatewayPingMs"],
+            "properties": {
+                "connected": { "type": "boolean" },
+                "gatewayPingMs": { "type": ["integer", "null"], "minimum": 0 }
+            },
+            "additionalProperties": false
+        },
+        "database": {
+            "type": "object",
+            "required": ["status", "latencyMs"],
+            "properties": {
+                "status": { "enum": ["operational", "unavailable"] },
+                "latencyMs": { "type": ["number", "null"], "minimum": 0 }
+            },
+            "additionalProperties": false
+        },
+        "providers": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": ["name", "status"],
+                "properties": {
+                    "name": { "type": "string" },
+                    "status": { "type": "string" }
+                },
+                "additionalProperties": false
+            }
+        },
+        "runtime": {
+            "type": "object",
+            "required": ["mode", "shardIds", "shardCount", "primary", "singletonOwner"],
+            "properties": {
+                "mode": { "enum": ["single", "sharded"] },
+                "shardIds": {
+                    "type": "array",
+                    "items": { "type": "integer", "minimum": 0 }
+                },
+                "shardCount": { "type": "integer", "minimum": 1 },
+                "primary": { "type": "boolean" },
+                "singletonOwner": { "type": "boolean" }
+            },
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}
